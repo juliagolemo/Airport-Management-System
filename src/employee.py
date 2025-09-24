@@ -24,3 +24,18 @@ class Stewardessa(Employee):
     def __str__(self):
         langs = ", ".join(self.languages)
         return f"{self.position}: {self.name}, Języki: {langs}"
+class Mechanik(Employee):
+    def __init__(self, name, specjalizacja):
+        super().__init__(name, "Mechanik")
+        self.specjalizacja = specjalizacja
+
+    def __str__(self):
+        return f"{self.position}: {self.name}, Specjalizacja: {self.specjalizacja}"
+
+class Sprzatacz(Employee):
+    def __init__(self, name, zmiana):
+        super().__init__(name, "Sprzątacz")
+        self.zmiana = zmiana
+
+    def __str__(self):
+        return f"{self.position}: {self.name}, Zmiana: {self.zmiana}"
