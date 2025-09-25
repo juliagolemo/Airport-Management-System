@@ -1,4 +1,5 @@
 from src.airplane import Airplane
+from src.passengers import Passengers
 
 from src.airplane import Airplane
 from src.employee import Pilot, Stewardessa, Mechanik, Sprzatacz
@@ -26,6 +27,17 @@ def main():
     print("\nPracownicy lotniska:")
     for emp in employees:
         print(emp)
+
+    # Passengers
+    passengers = [
+        Passengers("Julia Golemo", "AA1234567", "Polska"),
+        Passengers("Carlos Ramirez", "BB9876543", "Hiszpania"),
+        Passengers("Emily Smith", "CC1928374", "Wielka Brytania")
+    ]
+
+    print("\nLista pasażerów:")
+    for passenger in passengers:
+        print(passenger)
 
 if __name__ == "__main__":
     main()
