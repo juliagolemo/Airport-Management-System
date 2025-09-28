@@ -1,43 +1,31 @@
+from fastapi import FastAPI
 from src.airplane import Airplane
-from src.passengers import Passengers
+from src.airport_management_system import AirPortManagementSystem
+from fastapi import Request
+from contextlib import asynccontextmanager
 
-from src.airplane import Airplane
-from src.employee import Pilot, Stewardessa, Mechanik, Sprzatacz
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+	app.state.airport_system = AirPortManagementSystem()
+	yield
 
-def main():
-    # Samoloty
-    airplanes = [
-        Airplane("Boeing 737", 180, "SP-ABC"),
-        Airplane("Airbus A320", 150, "SP-DEF"),
-        Airplane("Embraer E190", 100, "SP-GHI")
+app = FastAPI(lifespan=lifespan)
+
+
+
+@app.post("/airplanes")
+def add_airplane(airplane: Airplane, request: Request):
+	request.app.state.airport_system.add_airplane(airplane)
+	return {"message": "Samolot dodany", "airplane": airplane}
+
+
+@app.get("/airplanes")
+def get_airplanes(request: Request):
+    airplanes = request.app.state.airport_system.get_airplanes()
+    return [
+        {
+            "model": a.model,
+            "capacity": a.capacity,
+            "registration_number": a.registration_number
+        } for a in airplanes
     ]
-
-    print("System uruchamiania samolotów:")
-    for airplane in airplanes:
-        print(f"Model: {airplane.model}, Pojemność: {airplane.capacity}, Rejestracja: {airplane.registration_number}")
-
-    # Pracownicy
-    employees = [
-        Pilot("Jan Kowalski", "PL12345"),
-        Stewardessa("Anna Nowak", ["Polski", "Angielski", "Hiszpański"]),
-        Mechanik("Piotr Zieliński", "mechanika lotnicza"),
-        Sprzatacz("Maria Wiśniewska", "nocna zmiana")
-    ]
-
-    print("\nPracownicy lotniska:")
-    for emp in employees:
-        print(emp)
-
-    # Passengers
-    passengers = [
-        Passengers("Julia Golemo", "AA1234567", "Polska"),
-        Passengers("Carlos Ramirez", "BB9876543", "Hiszpania"),
-        Passengers("Emily Smith", "CC1928374", "Wielka Brytania")
-    ]
-
-    print("\nLista pasażerów:")
-    for passenger in passengers:
-        print(passenger)
-
-if __name__ == "__main__":
-    main()
